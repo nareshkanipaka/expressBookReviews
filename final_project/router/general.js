@@ -25,10 +25,25 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
-  //Write your code here
-  return res.status(200).json(books);
+public_users.get('/', async function (req, res) {
+
+try {
+
+const result = await returnBooks ();
+
+ 
+
+return res.status(200).json({ data: result });
+
+} catch (error) {
+
+return res.status(500).json({ error: error.message });
+
+}
+
 });
+
+async function returnBooks() { return Object.values(books); }
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
