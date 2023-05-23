@@ -45,17 +45,51 @@ return res.status(500).json({ error: error.message });
 
 async function returnBooks() { return Object.values(books); }
 
-// Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
-  //Write your code here
-  const { isbn } = req.params;
-  const book = books[isbn]
-  if (book) {
-    return res.status(300).json(book);
-  } else {
-    return res.status(404).json({message: "Book not found"});
-  }
- });
+function searchBookById(id) {
+
+return new Promise((resolve, reject) => {
+
+setTimeout(() => {
+
+const book = books[id];
+
+resolve(book);
+
+}, 1000);
+
+});
+
+}
+
+public_users.get('/isbn/:isbn', function (req, res) {
+
+const bookId = parseInt(req.params.isbn);
+
+ 
+
+searchBookById(bookId)
+
+.then(book => {
+
+if (book) {
+
+return res.status(200).json({ book });
+
+} else {
+
+return res.status(404).json({ error: "Book not found" });
+
+}
+
+})
+
+.catch(error => {
+
+return res.status(500).json({ error: error.message });
+
+});
+
+});
 
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
